@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Painel Operacional</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #painel {
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <img id="painel" src="slide1.png" alt="Painel Operacional">
+
+    <script>
+
+        const slides = [
+            "slide1.png",
+            "slide2.png",
+            "slide3.png",
+            "slide4.png",
+            "slide5.png",
+            "slide6.png",
+        ];
+
+        const painel = document.getElementById("painel");
+
+        let atual = 0;
+
+        // Pré-carrega as imagens
+        slides.forEach(function(slide) {
+            const img = new Image();
+            img.src = slide;
+        });
+
+        // Troca de slide a cada 10 segundos
+        function trocarSlide() {
+
+            atual++;
+
+            if (atual >= slides.length) {
+                atual = 0;
+            }
+
+            painel.src = slides[atual];
+        }
+
+        setInterval(trocarSlide, 10000);
+
+        // Mantém a página ativa
+        setInterval(function() {
+
+            // Pequena atividade no DOM
+            document.title = "Painel Operacional - " +
+                new Date().toLocaleTimeString();
+
+        }, 30000);
+
+        // Se a página voltar a ficar visível,
+        // garante que a apresentação continue
+        document.addEventListener("visibilitychange", function() {
+
+            if (!document.hidden) {
+                painel.src = slides[atual];
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>
