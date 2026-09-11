@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Painel Operacional</title>
+    <title>Painel PMG</title>
 
     <style>
         * {
@@ -16,19 +16,13 @@
         html, body {
             width: 100%;
             height: 100%;
-            background: #000;
+            background: black;
             overflow: hidden;
         }
 
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #painel {
-            width: 100vw;
-            height: 100vh;
+        #slide {
+            width: 100%;
+            height: 100%;
             object-fit: contain;
             display: block;
         }
@@ -37,62 +31,31 @@
 
 <body>
 
-    <img id="painel" src="slide1.png" alt="Painel Operacional">
+    <img id="slide" src="https://rodrigocandidoalves.github.io/PMG-INDICADOR/Slide1.png">
 
     <script>
-
         const slides = [
-            "slide1.png",
-            "slide2.png",
-            "slide3.png",
-            "slide4.png",
-            "slide5.png",
-            "slide6.png",
+            "https://rodrigocandidoalves.github.io/PMG-INDICADOR/Slide1.png",
+            "https://rodrigocandidoalves.github.io/PMG-INDICADOR/Slide2.PNG",
+            "https://rodrigocandidoalves.github.io/PMG-INDICADOR/Slide3.PNG",
+            "https://rodrigocandidoalves.github.io/PMG-INDICADOR/Slide4.PNG",
+            "https://rodrigocandidoalves.github.io/PMG-INDICADOR/Slide5.PNG",
+            "https://rodrigocandidoalves.github.io/PMG-INDICADOR/Slide6.png"
         ];
-
-        const painel = document.getElementById("painel");
 
         let atual = 0;
 
-        // Pré-carrega as imagens
-        slides.forEach(function(slide) {
-            const img = new Image();
-            img.src = slide;
-        });
-
-        // Troca de slide a cada 10 segundos
         function trocarSlide() {
-
             atual++;
 
             if (atual >= slides.length) {
                 atual = 0;
             }
 
-            painel.src = slides[atual];
+            document.getElementById("slide").src = slides[atual];
         }
 
         setInterval(trocarSlide, 10000);
-
-        // Mantém a página ativa
-        setInterval(function() {
-
-            // Pequena atividade no DOM
-            document.title = "Painel Operacional - " +
-                new Date().toLocaleTimeString();
-
-        }, 30000);
-
-        // Se a página voltar a ficar visível,
-        // garante que a apresentação continue
-        document.addEventListener("visibilitychange", function() {
-
-            if (!document.hidden) {
-                painel.src = slides[atual];
-            }
-
-        });
-
     </script>
 
 </body>
