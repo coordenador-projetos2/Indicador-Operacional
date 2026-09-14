@@ -13,100 +13,173 @@
             box-sizing: border-box;
         }
 
-        html, body {
+        html,
+        body {
             width: 100%;
             height: 100%;
             background: #000;
             overflow: hidden;
         }
 
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
         #painel {
             width: 100vw;
             height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+
+        #slide {
+            width: 100%;
+            height: 100%;
             object-fit: contain;
             display: block;
+            background: #000;
+        }
+
+        #erro {
+            display: none;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 30px;
+        }
+
+        #erro h1 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        #erro p {
+            font-size: 20px;
+            line-height: 1.5;
         }
     </style>
 </head>
 
 <body>
 
-    <img id="painel" src="slide1.png" alt="Painel Operacional">
+    <div id="painel">
+        <img id="slide" src="" alt="Painel Operacional">
+
+        <div id="erro">
+            <h1>Erro ao carregar o painel</h1>
+            <p>Verifique se os arquivos Slide1.png, Slide2.PNG e Slide3.PNG estão no mesmo local que o index.html.</p>
+        </div>
+    </div>
 
     <script>
 
+        // ==========================================================
+        // ARQUIVOS DO PAINEL
+        // ==========================================================
+
         const slides = [
-            "slide1.png",
-            "slide2.PNG",
-            "slide3.PNG",
-            "slide4.PNG",
-            "slide5.PNG",
-            "slide6.PNG"
+            "Slide1.png",
+            "Slide2.PNG",
+            "Slide3.PNG"
         ];
 
-        const painel = document.getElementById("painel");
 
-        let atual = 0;
+        // ==========================================================
+        // CONFIGURAÇÃO
+        // ==========================================================
 
-        // Pré-carrega as imagens
-        slides.forEach(function(slide) {
-            const img = new Image();
-            img.src = slide;
-        });
+        let indiceAtual = 0;
 
-        // Troca de slide a cada 10 segundos
-        setInterval(function() {
+        // Tempo de cada slide em milissegundos
+        // 10000 = 10 segundos
+        const tempoSlide = 10000;
 
-            atual++;
+        const imagem = document.getElementById("slide");
+        const erro = document.getElementById("erro");
 
-            if (atual >= slides.length) {
-                atual = 0;
-            }
 
-            painel.src = slides[atual];
+        // ==========================================================
+        // CARREGAR SLIDE
+        // ==========================================================
 
-        }, 10000);
+        function carregarSlide() {
 
-        // Mantém atividade na página
-        setInterval(function() {
+            imagem.src = slides[indiceAtual];
 
-            document.title =
-                "Painel Operacional - " +
-                new Date().toLocaleTimeString();
+            console.log("Carregando:", slides[indiceAtual]);
 
-        }, 30000);
+        }
 
-        // Se a página voltar a ficar visível
-        document.addEventListener("visibilitychange", function() {
 
-            if (!document.hidden) {
-                painel.src = slides[atual];
-            }
+        // ==========================================================
+        // QUANDO A IMAGEM CARREGAR
+        // ==========================================================
 
-        });
+        imagem.onload = function () {
 
-        // Caso alguma imagem não seja encontrada
-        painel.onerror = function() {
+            console.log("Slide carregado:", imagem.src);
 
-            console.log(
-                "Erro ao carregar:",
-                slides[atual]
-            );
+            imagem.style.display = "block";
+            erro.style.display = "none";
 
-            atual++;
-
-            if (atual >= slides.length) {
-                atual = 0;
-            }
-
-            painel.src = slides[atual];
         };
+
+
+        // ==========================================================
+        // SE A IMAGEM DER ERRO
+        // ==========================================================
+
+        imagem.onerror = function () {
+
+            console.error("Erro ao carregar:", slides[indiceAtual]);
+
+            imagem.style.display = "none";
+            erro.style.display = "block";
+
+        };
+
+
+        // ==========================================================
+        // TROCAR SLIDE
+        // ==========================================================
+
+        function proximoSlide() {
+
+            indiceAtual++;
+
+            if (indiceAtual >= slides.length) {
+                indiceAtual = 0;
+            }
+
+            carregarSlide();
+
+        }
+
+
+        // ==========================================================
+        // INICIAR PAINEL
+        // ==========================================================
+
+        carregarSlide();
+
+
+        // ==========================================================
+        // LOOP AUTOMÁTICO
+        // ==========================================================
+
+        setInterval(proximoSlide, tempoSlide);
+
+
+        // ==========================================================
+        // RECARREGAMENTO AUTOMÁTICO
+        // ==========================================================
+        // A cada 30 minutos a página é recarregada.
+        // Isso ajuda a atualizar os indicadores na TV.
+
+        setInterval(function () {
+
+            location.reload();
+
+        }, 1800000);
+
 
     </script>
 
